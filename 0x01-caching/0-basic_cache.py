@@ -35,6 +35,9 @@ class BaseCaching():
 class BasicCache(BaseCaching):
     '''A caching system'''
 
+    def __init__(self):
+        super().__init__()
+
     def put(self, key, item):
         '''puts data into the cache'''
         if key is not None or item is not None:
