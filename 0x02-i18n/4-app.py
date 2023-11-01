@@ -20,10 +20,14 @@ app.config.from_object(Config)
 @babel.localeselector
 def get_locale():
     '''get locale'''
-    request.accept_languages.best_match(app.config['LANGUAGES'])
+    lang = request.args.get('locale', None)
+
+    if lang in app.config['LANGUAGES']:
+        return lang
+    return request.accept_languages.best_match(app.config['LANGUAGES'])
 
 
 @app.route("/")
 def hello_world():
     '''hello world'''
-    return render_template('3-index.html')
+    return render_template('4-index.html')
