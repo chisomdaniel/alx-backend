@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 '''Basic babel setup'''
-from flask import Flask
+from flask import Flask, render_template
 from flask_babel import Babel
 
 app = Flask(__name__)
@@ -15,3 +15,9 @@ class Config:
 
 
 app.config.from_object(Config)
+
+
+@app.route("/")
+def hello_world():
+    '''hello world'''
+    return render_template('1-index.html')
