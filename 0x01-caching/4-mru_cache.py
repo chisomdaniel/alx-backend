@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
-'''lru caching'''
+'''MRo caching'''
 from base_caching import BaseCaching
 
 
-def lowest_idx(track_dict):
-    '''return the key that has the lowest
+def highest_idx(track_dict):
+    '''return the key that has the highest
     index in a dictionary'''
     idx = list(track_dict.keys())[0]
-    lowest = track_dict[idx]
+    highest = track_dict[idx]
     for i, j in track_dict.items():
-        if lowest > j:
-            lowest = j
+        if highest < j:
+            highest = j
             idx = i
     return idx
 
 
-class LRUCache(BaseCaching):
-    '''the lru cache'''
+class MRUCache(BaseCaching):
+    '''the mru cache'''
 
     def __init__(self):
         super().__init__()
@@ -30,17 +30,21 @@ class LRUCache(BaseCaching):
         return self._idx
 
     def put(self, key, item):
-        '''put data using the LRU policy'''
+        '''put data using the MRU policy'''
         if key is None or item is None:
             return
+        if key in self.cache_data:
+            self.track[key] = self.idx
+            self.cache_data[key] = item
+            return
 
+        if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
+            highest = highest_idx(self.track)
+            del self.cache_data[highest]
+            print('DISCARD: {}'.format(highest))
+            del self.track[highest]
         self.track[key] = self.idx
         self.cache_data[key] = item
-        if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            least = lowest_idx(self.track)
-            del self.cache_data[least]
-            print('DISCARD: {}'.format(least))
-            del self.track[least]
 
     def get(self, key):
         '''get an element from the cache'''
